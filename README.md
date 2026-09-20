@@ -189,6 +189,11 @@ This project is distributed under the MIT license unless otherwise specified.
 - AudioTools
 - Android Bluetooth framework
 
+### Special Thanks
+
+- pschatzmann — for the excellent AudioTools and signal-processing foundations that made this project possible.
+
+
 ## Project Status
 
 The project is actively used as a custom Bluetooth audio controller and visualizer platform. It is suitable for experimentation, personal audio setups, and further extension into advanced DSP or smart home integrations.

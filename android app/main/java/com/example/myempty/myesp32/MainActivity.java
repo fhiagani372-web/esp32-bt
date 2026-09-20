@@ -17,8 +17,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.Locale;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.io.IOException;
@@ -38,6 +41,10 @@ public class MainActivity extends AppCompatActivity {
     private TextView connectionStatus;
     private Spinner deviceSpinner;
     private Spinner patternSpinner;
+    private Switch eqToggle;
+    private SeekBar seekEqLow;
+    private SeekBar seekEqMid;
+    private SeekBar seekEqHigh;
     private boolean updatingPattern;
     private final ArrayList<BluetoothDevice> devices = new ArrayList<>();
     private final Handler handler = new Handler(Looper.getMainLooper());
@@ -158,6 +165,50 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void applyResponse(String response) {
+        if (response.startsWith("eq#")) {
+            String[] eqParts = response.split("#", 2);
+            if (eqParts.length != 2) return;
+            String keyValue = eqParts[1].trim();
+            String[] valueParts = keyValue.split("=", 2);
+            if (valueParts.length != 2) return;
+
+            String key = valueParts[0].trim();
+            String valueText = valueParts[1].trim();
+
+            if (key.equals("enabled")) {
+                boolean enabled = valueText.equalsIgnoreCase("true");
+                if (eqToggle != null) eqToggle.setChecked(enabled);
+                return;
+            }
+            if (key.equals("low")) {
+                float value = Float.parseFloat(valueText);
+                int percent = Math.round((value / 2.0f) * 100f);
+                seekEqLow.setProgress(percent);
+                ((TextView) findViewById(R.id.tvEqLowValue)).setText(percent + "%");
+                return;
+            }
+            if (key.equals("mid") || key.equals("medium")) {
+                float value = Float.parseFloat(valueText);
+                int percent = Math.round((value / 2.0f) * 100f);
+                seekEqMid.setProgress(percent);
+                ((TextView) findViewById(R.id.tvEqMidValue)).setText(percent + "%");
+                return;
+            }
+            if (key.equals("high")) {
+                float value = Float.parseFloat(valueText);
+                int percent = Math.round((value / 2.0f) * 100f);
+                seekEqHigh.setProgress(percent);
+                ((TextView) findViewById(R.id.tvEqHighValue)).setText(percent + "%");
+                return;
+            }
+            if (key.equals("freq_low")) {
+                return;
+            }
+            if (key.equals("freq_high")) {
+                return;
+            }
+        }
+
         String[] parts = response.split("#", 2);
         if (parts.length != 2) return;
         try {
@@ -184,6 +235,21 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setupControls() {
+        eqToggle = findViewById(R.id.switchEq);
+        seekEqLow = findViewById(R.id.seekEqLow);
+        seekEqMid = findViewById(R.id.seekEqMid);
+        seekEqHigh = findViewById(R.id.seekEqHigh);
+
+        eqToggle.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (output == null) return;
+            sendCommand(isChecked ? "eq on" : "eq off");
+        });
+
+        bindEqSeek(R.id.seekEqLow, R.id.tvEqLowValue, "low");
+        bindEqSeek(R.id.seekEqMid, R.id.tvEqMidValue, "mid");
+        bindEqSeek(R.id.seekEqHigh, R.id.tvEqHighValue, "high");
+
+        findViewById(R.id.btnSaveEq).setOnClickListener(v -> sendCommand("saveEQ"));
         findViewById(R.id.btnPrevious).setOnClickListener(v -> sendCommand("prev"));
         findViewById(R.id.btnNext).setOnClickListener(v -> sendCommand("next"));
         findViewById(R.id.btnPlayPause).setOnClickListener(v -> sendCommand("play"));
@@ -205,6 +271,22 @@ public class MainActivity extends AppCompatActivity {
         bindSeek(R.id.seekLedDelay, R.id.tvLedDelay, "delay", " ms", 1);
         findViewById(R.id.btnSaveVisualizer).setOnClickListener(v -> saveVisualizer());
         findViewById(R.id.btnSaveSettings).setOnClickListener(v -> sendCommand("name#" + text(R.id.etBluetoothName)));
+    }
+
+    private void bindEqSeek(int seekId, int textId, String key) {
+        SeekBar seek = findViewById(seekId);
+        seek.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            public void onProgressChanged(SeekBar bar, int progress, boolean fromUser) {
+                int percent = Math.min(100, Math.max(0, progress));
+                float actualValue = (percent / 100.0f) * 2.0f;
+                ((TextView) findViewById(textId)).setText(percent + "%");
+                if (fromUser && output != null) {
+                    sendCommand("eq " + key + "=" + String.format(Locale.US, "%.2f", actualValue));
+                }
+            }
+            public void onStartTrackingTouch(SeekBar bar) {}
+            public void onStopTrackingTouch(SeekBar bar) {}
+        });
     }
 
     private void bindSeek(int seekId, int textId, String command, String suffix) { bindSeek(seekId, textId, command, suffix, 0); }

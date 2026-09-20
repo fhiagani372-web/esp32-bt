@@ -9,10 +9,11 @@
 
 I2SStream out;
 BluetoothA2DPSink btAudio(out);
+Equalizer3Bands eq(out);
+ConfigEqualizer3Bands cfg_eq;
 
 #define led 2       // built-in LED pin on ESP32 DevKit v1
 #define mute_Pin 14 // mute pin
-#define mute_btn 21 // testing mute button
 
 // RX TX pin to receive serial commands from a computer or other device
 #define rxPin 16
@@ -38,6 +39,7 @@ bool bt_on = true;
 bool bt_con_sound_played = false;
 bool bt_disc_sound_played = false;
 bool mute_state = false; // false = unmuted, true = muted
+bool eq_enabled = true;
 String play_state = "stopped";
 
 // current volume of the audio device (0..127)
@@ -181,6 +183,12 @@ void readAudioForVisualizer(const uint8_t *data, uint32_t length)
     audio_peak = peak;
 }
 
+void read_data_stream(const uint8_t *data, uint32_t length)
+{
+  readAudioForVisualizer(data, length);
+  eq.write(data, length);
+}
+
 void updateVisualizer()
 {
   if (millis() - last_visualizer_update < leds_delay)
@@ -299,6 +307,38 @@ void saveBluetoothName(const String &name)
   Preferences preferences;
   preferences.begin("btAudio", false);
   preferences.putString("dev_name", name);
+  preferences.end();
+}
+
+void loadEqualizerConfiguration()
+{
+  Preferences preferences;
+  preferences.begin("eqAudio", true);
+  cfg_eq.gain_low = preferences.getFloat("gain_low", 0.5f);
+  cfg_eq.gain_medium = preferences.getFloat("gain_medium", 0.5f);
+  cfg_eq.gain_high = preferences.getFloat("gain_high", 1.0f);
+  cfg_eq.freq_low = preferences.getInt("freq_low", 200);
+  cfg_eq.freq_high = preferences.getInt("freq_high", 4000);
+  eq_enabled = preferences.getBool("enabled", true);
+  preferences.end();
+
+  cfg_eq.gain_low = constrain(cfg_eq.gain_low, 0.0f, 2.0f);
+  cfg_eq.gain_medium = constrain(cfg_eq.gain_medium, 0.0f, 2.0f);
+  cfg_eq.gain_high = constrain(cfg_eq.gain_high, 0.0f, 2.0f);
+  cfg_eq.freq_low = constrain(cfg_eq.freq_low, 20, 20000);
+  cfg_eq.freq_high = constrain(cfg_eq.freq_high, cfg_eq.freq_low + 50, 20000);
+}
+
+void saveEqualizerConfiguration()
+{
+  Preferences preferences;
+  preferences.begin("eqAudio", false);
+  preferences.putFloat("gain_low", cfg_eq.gain_low);
+  preferences.putFloat("gain_medium", cfg_eq.gain_medium);
+  preferences.putFloat("gain_high", cfg_eq.gain_high);
+  preferences.putInt("freq_low", cfg_eq.freq_low);
+  preferences.putInt("freq_high", cfg_eq.freq_high);
+  preferences.putBool("enabled", eq_enabled);
   preferences.end();
 }
 
@@ -805,6 +845,102 @@ void btcon()
     if (command.length() == 0)
       continue;
 
+    if (command == "eq" || command == "eq status" || command == "eq#status")
+    {
+      SerialBt.printf("eq#enabled=%s\n", eq_enabled ? "true" : "false");
+      SerialBt.printf("eq#low=%0.2f\n", cfg_eq.gain_low);
+      SerialBt.printf("eq#mid=%0.2f\n", cfg_eq.gain_medium);
+      SerialBt.printf("eq#high=%0.2f\n", cfg_eq.gain_high);
+      continue;
+    }
+    else if (command == "saveeq" || command == "save eq" || command == "saveeq#")
+    {
+      saveEqualizerConfiguration();
+      SerialBt.println("eq#saved");
+      continue;
+    }
+    else if (command == "eq on" || command == "eq#on")
+    {
+      eq_enabled = true;
+      eq.begin(cfg_eq);
+      SerialBt.println("eq#ON");
+      continue;
+    }
+    else if (command == "eq off" || command == "eq#off")
+    {
+      eq_enabled = false;
+      eq.end();
+      SerialBt.println("eq#OFF");
+      continue;
+    }
+    else if (command.startsWith("eq low"))
+    {
+      String value_text = command.substring(String("eq low").length());
+      value_text.trim();
+      if (value_text.startsWith("=") || value_text.startsWith("#"))
+        value_text.remove(0, 1);
+      value_text.trim();
+
+      float gain = value_text.toFloat();
+      cfg_eq.gain_low = constrain(gain, 0.0f, 2.0f);
+      if (eq_enabled)
+        eq.begin(cfg_eq);
+      SerialBt.printf("eq#low=%0.2f\n", cfg_eq.gain_low);
+      continue;
+    }
+    else if (command.startsWith("eq mid") || command.startsWith("eq medium"))
+    {
+      String value_text = command.substring(command.startsWith("eq mid") ? String("eq mid").length() : String("eq medium").length());
+      value_text.trim();
+      if (value_text.startsWith("=") || value_text.startsWith("#"))
+        value_text.remove(0, 1);
+      value_text.trim();
+
+      float gain = value_text.toFloat();
+      cfg_eq.gain_medium = constrain(gain, 0.0f, 2.0f);
+      if (eq_enabled)
+        eq.begin(cfg_eq);
+      SerialBt.printf("eq#mid=%0.2f\n", cfg_eq.gain_medium);
+      continue;
+    }
+    else if (command.startsWith("eq high"))
+    {
+      String value_text = command.substring(String("eq high").length());
+      value_text.trim();
+      if (value_text.startsWith("=") || value_text.startsWith("#"))
+        value_text.remove(0, 1);
+      value_text.trim();
+
+      float gain = value_text.toFloat();
+      cfg_eq.gain_high = constrain(gain, 0.0f, 2.0f);
+      if (eq_enabled)
+        eq.begin(cfg_eq);
+      SerialBt.printf("eq#high=%0.2f\n", cfg_eq.gain_high);
+      continue;
+    }
+    else if (command.startsWith("eq freq"))
+    {
+      String value_text = command.substring(String("eq freq").length());
+      value_text.trim();
+      if (value_text.startsWith("=") || value_text.startsWith("#"))
+        value_text.remove(0, 1);
+      value_text.trim();
+
+      int comma = value_text.indexOf(',');
+      if (comma >= 0)
+      {
+        int low = value_text.substring(0, comma).toInt();
+        int high = value_text.substring(comma + 1).toInt();
+        cfg_eq.freq_low = constrain(low, 20, 20000);
+        cfg_eq.freq_high = constrain(high, cfg_eq.freq_low + 50, 20000);
+        if (eq_enabled)
+          eq.begin(cfg_eq);
+        SerialBt.printf("eq#freq_low=%d\n", cfg_eq.freq_low);
+        SerialBt.printf("eq#freq_high=%d\n", cfg_eq.freq_high);
+      }
+      continue;
+    }
+
     if (command == "print")
     {
       Serial.println("Current configuration:");
@@ -812,6 +948,10 @@ void btcon()
       Serial.printf("delay#%d\n", leds_delay);
       Serial.printf("bassf#%d\n", bassf);
       Serial.printf("bassl#%d\n", bassL);
+      Serial.printf("eq#enabled=%s\n", eq_enabled ? "true" : "false");
+      Serial.printf("eq#low=%0.2f\n", cfg_eq.gain_low);
+      Serial.printf("eq#mid=%0.2f\n", cfg_eq.gain_medium);
+      Serial.printf("eq#high=%0.2f\n", cfg_eq.gain_high);
       SerialBt.printf("leds#%d\n", NUM_LEDS);
       //
       SerialBt.println("Current configuration:");
@@ -821,6 +961,10 @@ void btcon()
       SerialBt.printf("bassl#%d\n", bassL);
       SerialBt.printf("leds#%d\n", NUM_LEDS);
       SerialBt.printf("pattern#%d\n", visualizer_pattern);
+      SerialBt.printf("eq#enabled=%s\n", eq_enabled ? "true" : "false");
+      SerialBt.printf("eq#low=%0.2f\n", cfg_eq.gain_low);
+      SerialBt.printf("eq#mid=%0.2f\n", cfg_eq.gain_medium);
+      SerialBt.printf("eq#high=%0.2f\n", cfg_eq.gain_high);
     }
     else if (command == "save")
     {
@@ -1107,7 +1251,6 @@ void setup()
 
   pinMode(led, OUTPUT);
   pinMode(mute_Pin, OUTPUT);
-  pinMode(mute_btn, INPUT_PULLUP);
 
   digitalWrite(mute_Pin, HIGH); // HIGH = unmute, LOW = mute
   mute_state = false;
@@ -1118,13 +1261,27 @@ void setup()
   cfg.pin_data = 25;
   out.begin(cfg);
 
+  cfg_eq = eq.defaultConfig();
+  cfg_eq.setAudioInfo(cfg);
+  loadEqualizerConfiguration();
+
+  if (eq_enabled)
+  {
+    eq.begin(cfg_eq);
+  }
+  else
+  {
+    eq.end();
+  }
+
   FastLED.addLeds<WS2812B, rgb_pin_L, GRB>(ledsL, 64);
   FastLED.addLeds<WS2812B, rgb_pin_R, GRB>(ledsR, 64);
   setLedBrightness();
   FastLED.clear(true);
 
-  // Analyze decoded PCM while retaining the normal I2S audio output.
-  btAudio.set_stream_reader(readAudioForVisualizer, true);
+  // Match the AudioTools example pattern: the equalizer consumes the stream and
+  // we disable the library's automatic I2S output to avoid double-writing audio.
+  btAudio.set_stream_reader(read_data_stream, false);
   btAudio.set_avrc_rn_playstatus_callback(avrc_rn_playstatus_callback);
   btAudio.set_avrc_metadata_attribute_mask(ESP_AVRC_MD_ATTR_TITLE |
                                            ESP_AVRC_MD_ATTR_ARTIST |
@@ -1148,32 +1305,7 @@ void loop()
   serialVizualierCTRL();
   btcon();
 
-  if (digitalRead(mute_btn) == LOW)
-  {
-    delay(50);
-    if (digitalRead(mute_btn) == LOW)
-    {
-      if (mute_state)
-      {
-        digitalWrite(mute_Pin, HIGH);
-        mute_state = false;
-        Serial.println("Mute button: unmuted");
-      }
-      else
-      {
-        digitalWrite(mute_Pin, LOW);
-        mute_state = true;
-        Serial.println("Mute button: muted");
-      }
-
-      while (digitalRead(mute_btn) == LOW)
-      {
-        delay(10);
-      }
-    }
-  }
-
-  // soundPlay();
+  soundPlay();
   loop_blink();
   updateVisualizer();
 }

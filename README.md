@@ -191,7 +191,9 @@ This project is distributed under the MIT license unless otherwise specified.
 
 ### Special Thanks
 
-- pschatzmann — for the excellent AudioTools and signal-processing foundations that made this project possible.
+- [pschatzmann](https://github.com/pschatzmann) — for the excellent AudioTools and ESP32-A2DP libraries, which provided the foundation for this project.
+- [arduino-audio-tools](https://github.com/pschatzmann/arduino-audio-tools/)
+- [ESP32-A2DP](https://github.com/pschatzmann/ESP32-A2DP)
 
 
 ## Project Status

@@ -1,0 +1,652 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+     xmlns:android="http://schemas.android.com/apk/res/android"
+     android:layout_height="match_parent"
+     android:layout_width="match_parent"
+     android:background="#0F0D13"
+     android:fillViewport="true">
+
+    <LinearLayout
+         android:layout_height="wrap_content"
+         android:layout_width="match_parent"
+         android:paddingEnd="18dp"
+         android:orientation="vertical"
+         android:paddingBottom="30dp"
+         android:paddingStart="18dp"
+         android:paddingTop="20dp">
+
+        <TextView
+             android:layout_height="wrap_content"
+             android:layout_width="match_parent"
+             android:gravity="center"
+             android:textSize="24sp"
+             android:textColor="#F5F1FA"
+             android:letterSpacing="0.04"
+             android:text="ESP32 CONTROLLER"
+             android:textStyle="bold" />
+
+        <TextView
+             android:layout_height="wrap_content"
+             android:layout_width="match_parent"
+             android:layout_marginBottom="26dp"
+             android:gravity="center"
+             android:textSize="14sp"
+             android:textColor="#FF8A80"
+             android:layout_marginTop="10dp"
+             android:id="@+id/tvConnectionStatus"
+             android:text="●  Belum tersambung"
+             android:textStyle="bold" />
+
+        <Spinner
+             android:layout_height="48dp"
+             android:layout_width="match_parent"
+             android:backgroundTint="#6E5A91"
+             android:id="@+id/spinnerDevices">
+
+        </Spinner>
+
+        <Button
+             android:layout_height="50dp"
+             android:layout_width="match_parent"
+             android:textSize="13sp"
+             android:backgroundTint="#7956C7"
+             android:textColor="#FFFFFF"
+             android:layout_marginTop="10dp"
+             android:id="@+id/btnConnect"
+             android:text="PILIH / HUBUNGKAN BLUETOOTH"
+             android:textStyle="bold" />
+
+        <TextView
+             android:layout_height="wrap_content"
+             android:layout_width="match_parent"
+             android:layout_marginBottom="10dp"
+             android:textSize="14sp"
+             android:textColor="#BFA7FF"
+             android:letterSpacing="0.12"
+             android:text="MUSIK"
+             android:textStyle="bold" />
+
+        <LinearLayout
+             android:layout_height="wrap_content"
+             android:layout_width="match_parent"
+             android:background="#1A171F"
+             android:padding="20dp"
+             android:orientation="vertical">
+
+            <TextView
+                 android:layout_height="wrap_content"
+                 android:layout_width="match_parent"
+                 android:gravity="center"
+                 android:ellipsize="end"
+                 android:textSize="21sp"
+                 android:textColor="#FFFFFF"
+                 android:maxLines="1"
+                 android:id="@+id/tvSongTitle"
+                 android:text="Judul Lagu"
+                 android:textStyle="bold" />
+
+            <TextView
+                 android:layout_height="wrap_content"
+                 android:layout_width="match_parent"
+                 android:gravity="center"
+                 android:ellipsize="end"
+                 android:textSize="15sp"
+                 android:textColor="#B8B2C1"
+                 android:layout_marginTop="6dp"
+                 android:maxLines="1"
+                 android:id="@+id/tvArtist"
+                 android:text="Artis" />
+
+            <TextView
+                 android:layout_height="wrap_content"
+                 android:layout_width="match_parent"
+                 android:gravity="center"
+                 android:ellipsize="end"
+                 android:textSize="13sp"
+                 android:textColor="#85808C"
+                 android:layout_marginTop="3dp"
+                 android:maxLines="1"
+                 android:id="@+id/tvAlbum"
+                 android:text="Album" />
+
+            <LinearLayout
+                 android:layout_height="wrap_content"
+                 android:layout_width="match_parent"
+                 android:gravity="center"
+                 android:orientation="horizontal"
+                 android:layout_marginTop="24dp">
+
+                <Button
+                     android:layout_height="52dp"
+                     android:layout_width="0dp"
+                     android:layout_marginEnd="5dp"
+                     android:textSize="13sp"
+                     android:backgroundTint="#30283A"
+                     android:textColor="#E8DFFF"
+                     android:layout_weight="1"
+                     android:id="@+id/btnPrevious"
+                     android:text="PREV"
+                     android:textStyle="bold" />
+
+                <Button
+                     android:layout_height="52dp"
+                     android:layout_width="0dp"
+                     android:layout_marginEnd="5dp"
+                     android:textSize="12sp"
+                     android:backgroundTint="#7956C7"
+                     android:textColor="#FFFFFF"
+                     android:layout_marginStart="5dp"
+                     android:layout_weight="1.3"
+                     android:id="@+id/btnPlayPause"
+                     android:text="PLAY / PAUSE"
+                     android:textStyle="bold" />
+
+                <Button
+                     android:layout_height="52dp"
+                     android:layout_width="0dp"
+                     android:textSize="13sp"
+                     android:backgroundTint="#30283A"
+                     android:textColor="#E8DFFF"
+                     android:layout_marginStart="5dp"
+                     android:layout_weight="1"
+                     android:id="@+id/btnNext"
+                     android:text="NEXT"
+                     android:textStyle="bold" />
+
+            </LinearLayout>
+
+            <Button
+                 android:layout_height="46dp"
+                 android:layout_width="match_parent"
+                 android:textSize="12sp"
+                 android:backgroundTint="#242027"
+                 android:textColor="#B8B2C1"
+                 android:layout_marginTop="10dp"
+                 android:id="@+id/btnStop"
+                 android:text="STOP"
+                 android:textStyle="bold" />
+
+        </LinearLayout>
+
+        <TextView
+             android:layout_height="wrap_content"
+             android:layout_width="match_parent"
+             android:layout_marginBottom="10dp"
+             android:textSize="14sp"
+             android:textColor="#BFA7FF"
+             android:layout_marginTop="28dp"
+             android:letterSpacing="0.12"
+             android:text="VISUALIZER"
+             android:textStyle="bold" />
+
+        <LinearLayout
+             android:layout_height="wrap_content"
+             android:layout_width="match_parent"
+             android:background="#1A171F"
+             android:padding="20dp"
+             android:orientation="vertical">
+
+            <TextView
+                 android:layout_height="wrap_content"
+                 android:layout_width="match_parent"
+                 android:textSize="15sp"
+                 android:textColor="#FFFFFF"
+                 android:text="Pola Visualizer"
+                 android:textStyle="bold" />
+
+            <Spinner
+                 android:layout_height="48dp"
+                 android:layout_width="match_parent"
+                 android:backgroundTint="#6E5A91"
+                 android:layout_marginTop="6dp"
+                 android:id="@+id/spinnerPattern">
+
+            </Spinner>
+
+            <LinearLayout
+                 android:layout_height="wrap_content"
+                 android:layout_width="match_parent"
+                 android:gravity="center_vertical"
+                 android:orientation="horizontal">
+
+                <TextView
+                     android:layout_height="wrap_content"
+                     android:layout_width="0dp"
+                     android:textSize="16sp"
+                     android:textColor="#FFFFFF"
+                     android:layout_weight="1"
+                     android:text="BASS FILTER LOW"
+                     android:textStyle="bold" />
+
+                <TextView
+                     android:layout_height="wrap_content"
+                     android:layout_width="wrap_content"
+                     android:textSize="16sp"
+                     android:textColor="#BFA7FF"
+                     android:id="@+id/tvBassLowValue"
+                     android:text="0"
+                     android:textStyle="bold" />
+
+            </LinearLayout>
+
+            <SeekBar
+                 android:layout_height="wrap_content"
+                 android:layout_width="match_parent"
+                 android:max="8"
+                 android:layout_marginTop="6dp"
+                 android:progress="0"
+                 android:id="@+id/seekBassLow" />
+
+            <LinearLayout
+                 android:layout_height="wrap_content"
+                 android:layout_width="match_parent"
+                 android:gravity="center_vertical"
+                 android:orientation="horizontal"
+                 android:layout_marginTop="22dp">
+
+                <TextView
+                     android:layout_height="wrap_content"
+                     android:layout_width="0dp"
+                     android:textSize="16sp"
+                     android:textColor="#FFFFFF"
+                     android:layout_weight="1"
+                     android:text="FULL RANGE"
+                     android:textStyle="bold" />
+
+                <TextView
+                     android:layout_height="wrap_content"
+                     android:layout_width="wrap_content"
+                     android:textSize="16sp"
+                     android:textColor="#BFA7FF"
+                     android:id="@+id/tvFullRangeValue"
+                     android:text="0"
+                     android:textStyle="bold" />
+
+            </LinearLayout>
+
+            <SeekBar
+                 android:layout_height="wrap_content"
+                 android:layout_width="match_parent"
+                 android:max="8"
+                 android:layout_marginTop="6dp"
+                 android:progress="0"
+                 android:id="@+id/seekFullRange" />
+
+            <TextView
+                 android:layout_height="wrap_content"
+                 android:layout_width="match_parent"
+                 android:textSize="15sp"
+                 android:textColor="#FFFFFF"
+                 android:layout_marginTop="24dp"
+                 android:text="Jumlah LED (kiri kanan)"
+                 android:textStyle="bold" />
+
+            <TextView
+                 android:layout_height="wrap_content"
+                 android:layout_width="match_parent"
+                 android:layout_marginBottom="4dp"
+                 android:textSize="12sp"
+                 android:textColor="#85808C"
+                 android:layout_marginTop="4dp"
+                 android:text="Masukkan jumlah LED berdasarkan panjang masing-masing strip. Bukan jumlah total LED kiri dan kanan." />
+
+            <EditText
+                 android:layout_height="48dp"
+                 android:layout_width="match_parent"
+                 android:paddingEnd="4dp"
+                 android:hint="Contoh: 8"
+                 android:textColorHint="#77727D"
+                 android:backgroundTint="#6E5A91"
+                 android:singleLine="true"
+                 android:textColor="#FFFFFF"
+                 android:paddingStart="4dp"
+                 android:inputType="number"
+                 android:id="@+id/etLedCount" />
+
+            <LinearLayout
+                 android:layout_height="wrap_content"
+                 android:layout_width="match_parent"
+                 android:gravity="center_vertical"
+                 android:orientation="horizontal"
+                 android:layout_marginTop="24dp">
+
+                <TextView
+                     android:layout_height="wrap_content"
+                     android:layout_width="0dp"
+                     android:textSize="16sp"
+                     android:textColor="#FFFFFF"
+                     android:layout_weight="1"
+                     android:text="Kecerahan"
+                     android:textStyle="bold" />
+
+                <TextView
+                     android:layout_height="wrap_content"
+                     android:layout_width="wrap_content"
+                     android:textSize="16sp"
+                     android:textColor="#BFA7FF"
+                     android:id="@+id/tvBrightness"
+                     android:text="50%"
+                     android:textStyle="bold" />
+
+            </LinearLayout>
+
+            <SeekBar
+                 android:layout_height="wrap_content"
+                 android:layout_width="match_parent"
+                 android:max="100"
+                 android:min="1"
+                 android:layout_marginTop="6dp"
+                 android:progress="50"
+                 android:id="@+id/seekBrightness" />
+
+            <LinearLayout
+                 android:layout_height="wrap_content"
+                 android:layout_width="match_parent"
+                 android:gravity="center_vertical"
+                 android:orientation="horizontal"
+                 android:layout_marginTop="24dp">
+
+                <TextView
+                     android:layout_height="wrap_content"
+                     android:layout_width="0dp"
+                     android:textSize="16sp"
+                     android:textColor="#FFFFFF"
+                     android:layout_weight="1"
+                     android:text="LED DELAY"
+                     android:textStyle="bold" />
+
+                <TextView
+                     android:layout_height="wrap_content"
+                     android:layout_width="wrap_content"
+                     android:textSize="16sp"
+                     android:textColor="#BFA7FF"
+                     android:id="@+id/tvLedDelay"
+                     android:text="1"
+                     android:textStyle="bold" />
+
+            </LinearLayout>
+
+            <SeekBar
+                 android:layout_height="wrap_content"
+                 android:layout_width="match_parent"
+                 android:max="49"
+                 android:layout_marginTop="6dp"
+                 android:progress="0"
+                 android:id="@+id/seekLedDelay" />
+
+            <TextView
+                 android:layout_height="wrap_content"
+                 android:layout_width="match_parent"
+                 android:gravity="center"
+                 android:textSize="12sp"
+                 android:textColor="#85808C"
+                 android:layout_marginTop="4dp"
+                 android:text="Delay LED: 1–50 ms" />
+
+            <Button
+                 android:layout_height="50dp"
+                 android:layout_width="match_parent"
+                 android:textSize="13sp"
+                 android:backgroundTint="#7956C7"
+                 android:textColor="#FFFFFF"
+                 android:layout_marginTop="24dp"
+                 android:id="@+id/btnSaveVisualizer"
+                 android:text="SIMPAN PENGATURAN VISUALIZER"
+                 android:textStyle="bold" />
+
+            <TextView
+                 android:layout_height="wrap_content"
+                 android:layout_width="match_parent"
+                 android:gravity="center"
+                 android:textSize="12sp"
+                 android:textColor="#9A939F"
+                 android:layout_marginTop="10dp"
+                 android:text="Pengaturan visualizer akan disimpan ke ESP32." />
+
+        </LinearLayout>
+
+        <TextView
+             android:layout_height="wrap_content"
+             android:layout_width="match_parent"
+             android:layout_marginBottom="10dp"
+             android:textSize="14sp"
+             android:textColor="#BFA7FF"
+             android:layout_marginTop="28dp"
+             android:letterSpacing="0.12"
+             android:text="EQUALIZER"
+             android:textStyle="bold" />
+
+        <LinearLayout
+             android:layout_height="wrap_content"
+             android:layout_width="match_parent"
+             android:background="#1A171F"
+             android:padding="20dp"
+             android:orientation="vertical">
+
+            <LinearLayout
+                 android:layout_height="wrap_content"
+                 android:layout_width="match_parent"
+                 android:gravity="center_vertical"
+                 android:orientation="horizontal">
+
+                <TextView
+                     android:layout_height="wrap_content"
+                     android:layout_width="0dp"
+                     android:textSize="16sp"
+                     android:textColor="#FFFFFF"
+                     android:layout_weight="1"
+                     android:text="EQ ON / OFF"
+                     android:textStyle="bold" />
+
+                <Switch
+                     android:layout_height="wrap_content"
+                     android:layout_width="wrap_content"
+                     android:id="@+id/switchEq" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                 android:layout_height="wrap_content"
+                 android:layout_width="match_parent"
+                 android:gravity="center_vertical"
+                 android:orientation="horizontal"
+                 android:layout_marginTop="18dp">
+
+                <TextView
+                     android:layout_height="wrap_content"
+                     android:layout_width="0dp"
+                     android:textSize="16sp"
+                     android:textColor="#FFFFFF"
+                     android:layout_weight="1"
+                     android:text="LOW"
+                     android:textStyle="bold" />
+
+                <TextView
+                     android:layout_height="wrap_content"
+                     android:layout_width="wrap_content"
+                     android:textSize="16sp"
+                     android:textColor="#BFA7FF"
+                     android:id="@+id/tvEqLowValue"
+                     android:text="50%"
+                     android:textStyle="bold" />
+
+            </LinearLayout>
+
+            <SeekBar
+                 android:layout_height="wrap_content"
+                 android:layout_width="match_parent"
+                 android:max="100"
+                 android:layout_marginTop="6dp"
+                 android:progress="50"
+                 android:id="@+id/seekEqLow" />
+
+            <LinearLayout
+                 android:layout_height="wrap_content"
+                 android:layout_width="match_parent"
+                 android:gravity="center_vertical"
+                 android:orientation="horizontal"
+                 android:layout_marginTop="18dp">
+
+                <TextView
+                     android:layout_height="wrap_content"
+                     android:layout_width="0dp"
+                     android:textSize="16sp"
+                     android:textColor="#FFFFFF"
+                     android:layout_weight="1"
+                     android:text="MID"
+                     android:textStyle="bold" />
+
+                <TextView
+                     android:layout_height="wrap_content"
+                     android:layout_width="wrap_content"
+                     android:textSize="16sp"
+                     android:textColor="#BFA7FF"
+                     android:id="@+id/tvEqMidValue"
+                     android:text="50%"
+                     android:textStyle="bold" />
+
+            </LinearLayout>
+
+            <SeekBar
+                 android:layout_height="wrap_content"
+                 android:layout_width="match_parent"
+                 android:max="100"
+                 android:layout_marginTop="6dp"
+                 android:progress="50"
+                 android:id="@+id/seekEqMid" />
+
+            <LinearLayout
+                 android:layout_height="wrap_content"
+                 android:layout_width="match_parent"
+                 android:gravity="center_vertical"
+                 android:orientation="horizontal"
+                 android:layout_marginTop="18dp">
+
+                <TextView
+                     android:layout_height="wrap_content"
+                     android:layout_width="0dp"
+                     android:textSize="16sp"
+                     android:textColor="#FFFFFF"
+                     android:layout_weight="1"
+                     android:text="HIGH"
+                     android:textStyle="bold" />
+
+                <TextView
+                     android:layout_height="wrap_content"
+                     android:layout_width="wrap_content"
+                     android:textSize="16sp"
+                     android:textColor="#BFA7FF"
+                     android:id="@+id/tvEqHighValue"
+                     android:text="100%"
+                     android:textStyle="bold" />
+
+            </LinearLayout>
+
+            <SeekBar
+                 android:layout_height="wrap_content"
+                 android:layout_width="match_parent"
+                 android:max="100"
+                 android:layout_marginTop="6dp"
+                 android:progress="100"
+                 android:id="@+id/seekEqHigh" />
+
+            <Button
+                 android:layout_height="50dp"
+                 android:layout_width="match_parent"
+                 android:textSize="13sp"
+                 android:backgroundTint="#7956C7"
+                 android:textColor="#FFFFFF"
+                 android:layout_marginTop="24dp"
+                 android:id="@+id/btnSaveEq"
+                 android:text="SIMPAN EQ"
+                 android:textStyle="bold" />
+
+            <TextView
+                 android:layout_height="wrap_content"
+                 android:layout_width="match_parent"
+                 android:gravity="center"
+                 android:textSize="12sp"
+                 android:textColor="#9A939F"
+                 android:layout_marginTop="10dp"
+                 android:text="Setting equalizer akan disimpan ke ESP32." />
+
+        </LinearLayout>
+
+        <TextView
+             android:layout_height="wrap_content"
+             android:layout_width="match_parent"
+             android:layout_marginBottom="10dp"
+             android:textSize="14sp"
+             android:textColor="#BFA7FF"
+             android:layout_marginTop="28dp"
+             android:letterSpacing="0.12"
+             android:text="BLUETOOTH"
+             android:textStyle="bold" />
+
+        <LinearLayout
+             android:layout_height="wrap_content"
+             android:layout_width="match_parent"
+             android:background="#1A171F"
+             android:padding="20dp"
+             android:orientation="vertical">
+
+            <TextView
+                 android:layout_height="wrap_content"
+                 android:layout_width="match_parent"
+                 android:textSize="15sp"
+                 android:textColor="#FFFFFF"
+                 android:text="Nama Bluetooth"
+                 android:textStyle="bold" />
+
+            <EditText
+                 android:layout_height="48dp"
+                 android:layout_width="match_parent"
+                 android:paddingEnd="4dp"
+                 android:hint="Nama Bluetooth"
+                 android:textColorHint="#77727D"
+                 android:backgroundTint="#6E5A91"
+                 android:singleLine="true"
+                 android:textColor="#FFFFFF"
+                 android:paddingStart="4dp"
+                 android:layout_marginTop="4dp"
+                 android:inputType="text"
+                 android:id="@+id/etBluetoothName" />
+
+            <Button
+                 android:layout_height="50dp"
+                 android:layout_width="match_parent"
+                 android:textSize="13sp"
+                 android:backgroundTint="#7956C7"
+                 android:textColor="#FFFFFF"
+                 android:layout_marginTop="22dp"
+                 android:id="@+id/btnSaveSettings"
+                 android:text="SIMPAN NAMA BLUETOOTH"
+                 android:textStyle="bold" />
+
+            <TextView
+                 android:layout_height="wrap_content"
+                 android:layout_width="match_parent"
+                 android:gravity="center"
+                 android:textSize="12sp"
+                 android:textColor="#9A939F"
+                 android:layout_marginTop="10dp"
+                 android:text="Menyimpan nama Bluetooth akan merestart Bluetooth ESP32." />
+
+            <TextView
+                 android:layout_height="wrap_content"
+                 android:layout_width="match_parent"
+                 android:gravity="center"
+                 android:textSize="11sp"
+                 android:textColor="#68636D"
+                 android:layout_marginTop="4dp"
+                 android:text="Pengaturan Bluetooth lainnya diterapkan langsung tanpa perlu disimpan." />
+
+        </LinearLayout>
+
+        <Space
+             android:layout_height="20dp"
+             android:layout_width="match_parent" />
+
+    </LinearLayout>
+
+</ScrollView>
